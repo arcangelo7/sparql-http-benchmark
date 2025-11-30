@@ -1106,7 +1106,7 @@ requires-dist = [
     { name = "requests", specifier = ">=2.32.5" },
     { name = "seaborn", specifier = ">=0.13.2" },
     { name = "urllib3", specifier = ">=2.5.0" },
-    { name = "virtuoso-utilities", specifier = ">=1.5.3" },
+    { name = "virtuoso-utilities", specifier = ">=1.6.1" },
 ]
 
 [[package]]
@@ -1150,15 +1150,15 @@ wheels = [
 
 [[package]]
 name = "virtuoso-utilities"
-version = "1.5.3"
+version = "1.6.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "psutil" },
     { name = "tqdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b8/a6/4092c4b8194646abf458a8f057d44ceeadebfe1a754fd7236e8deed6aa55/virtuoso_utilities-1.5.3.tar.gz", hash = "sha256:1989fee27238a43bab51a4ca19a48d3b458cf7962a66cde9d3e5a99f5c0bdc35", size = 33338, upload-time = "2025-11-26T22:10:21.718Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6c/eb/566d8a719b84d8a00961d61e0b519c51579d68df96ca53a2948cde453b4b/virtuoso_utilities-1.6.1.tar.gz", hash = "sha256:2a89e940aa4f495f4f12e1bc7e97418ae9e44b9a26512c2b24503c68c3818b5b", size = 125660, upload-time = "2025-11-30T17:07:33.743Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d7/fc/37e23b716eb1b634fcd13615080a18982ff0b95f0cf8be2a0b364ea477e9/virtuoso_utilities-1.5.3-py3-none-any.whl", hash = "sha256:5bbc0d326ea9b92c3d2feab6aaa7930f85873eac01d1909c4e072879d743a6bf", size = 31273, upload-time = "2025-11-26T22:10:20.637Z" },
+    { url = "https://files.pythonhosted.org/packages/c6/c4/414bbba54c6180c9129f72d84217900cdff6233380755b05a505390315d9/virtuoso_utilities-1.6.1-py3-none-any.whl", hash = "sha256:d07a3ad7358d3364b30f1805ae7608dc2e017b408d73c5f63cd19d035a837e97", size = 24889, upload-time = "2025-11-30T17:07:32.893Z" },
 ]
 
 [[package]]

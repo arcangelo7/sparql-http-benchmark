@@ -26,7 +26,6 @@ Benchmark for comparing Python HTTP libraries on SPARQL 1.1 operations against a
 
 - Python 3.12+
 - Docker (for Virtuoso)
-- [virtuoso-utilities](https://github.com/slotruglio/virtuoso-utilities)
 
 ## Installation
 
@@ -42,18 +41,6 @@ Run the complete benchmark (launches Virtuoso automatically):
 uv run python benchmark.py
 ```
 
-Run benchmark with existing Virtuoso instance:
-
-```bash
-uv run python benchmark.py --skip-setup
-```
-
-Generate analytics charts:
-
-```bash
-uv run python benchmark_analytics.py
-```
-
 ## Configuration
 
 Edit constants in `benchmark.py`:
@@ -63,7 +50,7 @@ Edit constants in `benchmark.py`:
 
 Edit constants in `setup_virtuoso.py`:
 
-- `HTTP_PORT`: Virtuoso SPARQL endpoint port (default: 8890)
+- `HTTP_PORT`: Virtuoso SPARQL endpoint port (default: 8090)
 - `MEMORY`: Container memory limit (default: 4g)
 
 ## Fairness
@@ -85,3 +72,60 @@ All libraries are configured with equivalent settings:
 - `avg_time_by_library.png`: Average request time by library
 - `rps_read_vs_write.png`: Read vs write performance
 - `rps_heatmap.png`: Performance heatmap
+
+## Results
+
+### Overall ranking (by average request time)
+
+| Rank | Library | Avg time (ms) |
+|------|---------|---------------|
+| 1 | pycurl | 0.78 |
+| 2 | aiohttp | 1.45 |
+| 3 | urllib3 | 1.50 |
+| 4 | httpx (sync) | 1.61 |
+| 5 | requests | 1.78 |
+| 6 | httpx (async) | 2.02 |
+
+### Read operations (requests/sec)
+
+| Library | ASK | SELECT simple | SELECT filter | SELECT optional | CONSTRUCT |
+|---------|-----|---------------|---------------|-----------------|-----------|
+| pycurl | 5214 | 5019 | 4435 | 4668 | 4384 |
+| aiohttp | 2341 | 586 | 777 | 739 | 812 |
+| urllib3 | 2200 | 583 | 781 | 740 | 776 |
+| httpx (sync) | 1847 | 558 | 730 | 682 | 724 |
+| requests | 1396 | 503 | 653 | 621 | 678 |
+| httpx (async) | 1015 | 438 | 548 | 538 | 568 |
+
+### Write operations (requests/sec)
+
+| Library | INSERT | DELETE | UPDATE |
+|---------|--------|--------|--------|
+| pycurl | 435 | 440 | 1938 |
+| aiohttp | 410 | 403 | 1447 |
+| urllib3 | 402 | 376 | 1406 |
+| httpx (sync) | 396 | 367 | 1152 |
+| requests | 356 | 344 | 974 |
+| httpx (async) | 330 | 327 | 830 |
+
+### Key findings
+
+**pycurl dominates read operations**: pycurl achieves 5000+ requests/sec on simple queries, 5-6x faster than any other library. This is due to libcurl's highly optimized C implementation and minimal Python overhead.
+
+**Write performance is more uniform**: All libraries converge to similar performance on write operations (INSERT/DELETE around 350-440 req/s). This indicates the bottleneck shifts to Virtuoso's write path rather than HTTP client overhead.
+
+**Async libraries underperform in sequential benchmarks**: httpx async is the slowest library in this benchmark. Without concurrent requests, async overhead (event loop, coroutine scheduling) adds latency without benefits. aiohttp performs better due to its more optimized implementation.
+
+**urllib3 outperforms requests**: Despite requests being built on urllib3, the additional abstraction layer adds measurable overhead (~15-20% slower).
+
+**httpx sync vs async**: The synchronous httpx client is significantly faster than its async counterpart in sequential workloads, suggesting async should only be used when actual concurrency is needed.
+
+### Charts
+
+![Requests per second by query type](rps_by_query.png)
+
+![Average request time by library](avg_time_by_library.png)
+
+![Read vs write performance](rps_read_vs_write.png)
+
+![Performance heatmap](rps_heatmap.png)

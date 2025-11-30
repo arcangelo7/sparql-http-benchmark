@@ -1,6 +1,7 @@
 import asyncio
 import csv
 import random
+import subprocess
 import sys
 import time
 
@@ -180,6 +181,11 @@ def save_results(results: list[BenchmarkResult]) -> None:
     print(f"\nResults saved to {RESULTS_FILE}")
 
 
+def generate_analytics() -> None:
+    """Generate analytics charts from benchmark results."""
+    subprocess.run([sys.executable, "benchmark_analytics.py"], check=True)
+
+
 def main() -> None:
     print("SPARQL HTTP Benchmark")
     print("=" * 50)
@@ -196,6 +202,9 @@ def main() -> None:
     print("\nSaving results...")
     save_results(results)
 
+    print("\nGenerating analytics...")
+    generate_analytics()
+
     print("\nStopping Virtuoso...")
     stop_virtuoso()
 
@@ -207,5 +216,6 @@ if __name__ == "__main__":
         print("Skipping Virtuoso setup...")
         results = run_benchmark()
         save_results(results)
+        generate_analytics()
     else:
         main()
