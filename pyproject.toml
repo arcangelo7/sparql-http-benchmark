@@ -1,0 +1,17 @@
+[project]
+name = "sparql-http-benchmark"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aiohttp>=3.13.2",
+    "httpx>=0.28.1",
+    "matplotlib>=3.10.7",
+    "pandas>=2.3.3",
+    "pycurl>=7.45.7",
+    "requests>=2.32.5",
+    "seaborn>=0.13.2",
+    "urllib3>=2.5.0",
+    "virtuoso-utilities>=1.5.3",
+]
