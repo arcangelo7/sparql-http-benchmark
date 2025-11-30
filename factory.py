@@ -1,8 +1,6 @@
-import asyncio
 import time
 from abc import ABC, abstractmethod
 from io import BytesIO
-
 import aiohttp
 import httpx
 import pycurl

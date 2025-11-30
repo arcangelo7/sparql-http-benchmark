@@ -1,4 +1,5 @@
 BASE = "http://example.org/"
+GRAPH = "http://example.org/benchmark"
 
 QUERIES = {
     "select_simple": {
@@ -42,10 +43,12 @@ UPDATES = {
         "operation": "INSERT",
         "sparql": f"""
             INSERT DATA {{
-                {" ".join(
-                    f"<{BASE}benchmark/entity/{i}> <{BASE}benchmarkValue> {i} ."
-                    for i in range(100)
-                )}
+                GRAPH <{GRAPH}> {{
+                    {" ".join(
+                        f"<{BASE}benchmark/entity/{i}> <{BASE}benchmarkValue> {i} ."
+                        for i in range(100)
+                    )}
+                }}
             }}
         """,
     },
@@ -53,16 +56,19 @@ UPDATES = {
         "operation": "DELETE",
         "sparql": f"""
             DELETE DATA {{
-                {" ".join(
-                    f"<{BASE}benchmark/entity/{i}> <{BASE}benchmarkValue> {i} ."
-                    for i in range(100)
-                )}
+                GRAPH <{GRAPH}> {{
+                    {" ".join(
+                        f"<{BASE}benchmark/entity/{i}> <{BASE}benchmarkValue> {i} ."
+                        for i in range(100)
+                    )}
+                }}
             }}
         """,
     },
     "update": {
         "operation": "UPDATE",
         "sparql": f"""
+            WITH <{GRAPH}>
             DELETE {{ ?s <{BASE}benchmarkValue> ?old }}
             INSERT {{ ?s <{BASE}benchmarkValue> ?new }}
             WHERE {{

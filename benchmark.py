@@ -23,17 +23,20 @@ RESULTS_FILE = "benchmark_results.csv"
 
 
 def load_test_data() -> None:
-    """Load test data into Virtuoso via SPARQL INSERT."""
+    """Load test data into Virtuoso via SPARQL INSERT in batches."""
     endpoint = get_sparql_endpoint()
-    insert_query = generate_insert_sparql(1000)
+    batch_size = 100
+    total_entities = 1000
 
     with httpx.Client(timeout=60.0) as client:
-        response = client.post(
-            endpoint,
-            content=insert_query,
-            headers={"Content-Type": "application/sparql-update"},
-        )
-        response.raise_for_status()
+        for start in range(0, total_entities, batch_size):
+            insert_query = generate_insert_sparql(batch_size, start)
+            response = client.post(
+                endpoint,
+                content=insert_query,
+                headers={"Content-Type": "application/sparql-update"},
+            )
+            response.raise_for_status()
 
     print("Test data loaded successfully")
 
